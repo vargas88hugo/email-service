@@ -2,17 +2,16 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
-  NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
-import { UserRepository } from '../repositories/user.repository';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
-import { User } from '../entities/user.entity';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from '../dto/jwt-payload.interface';
-import { SignInCredentialsDto } from '../dto/signin-credentials.dto';
+import { UserRepository } from './user.repository';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { User } from './user.entity';
+import { JwtPayload } from './dto/jwt-payload.interface';
+import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,9 +35,6 @@ export class AuthService {
     signInCredentialsDto: SignInCredentialsDto,
   ): Promise<{ accessToken: string }> {
     const userEmail = await this.validatePassword(signInCredentialsDto);
-    if (!userEmail) {
-      throw new UnauthorizedException('Invalid Credentials');
-    }
     const payload: JwtPayload = { userEmail };
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };

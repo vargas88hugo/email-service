@@ -1,19 +1,14 @@
-import { AuthService } from './auth.service';
-import { Connection, Repository } from 'typeorm';
-import {
-  ConflictException,
-  BadRequestException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
-import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy } from '../helpers/jwt.strategy';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfigTest } from '../../config/typeorm.configtest';
-import { UserRepository } from '../repositories/user.repository';
 import { JwtModule } from '@nestjs/jwt';
-import { User } from '../entities/user.entity';
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { AuthService } from './auth.service';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { JwtStrategy } from './jwt.strategy';
+import { typeOrmConfigTest } from '../config/typeorm.configtest';
+import { UserRepository } from './user.repository';
 
 const mockUserRepository = () => ({});
 
