@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
@@ -39,7 +40,6 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Credentials');
     }
     const payload: JwtPayload = { userEmail };
-    console.log(payload, this.jwtService);
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };
   }
@@ -49,12 +49,14 @@ export class AuthService {
   ): Promise<string> {
     const { email, password } = signInCredentialsDto;
     const user = await this.userRepository.findOne({ email });
-    const hash = await bcrypt.hash(password, user.salt);
-    if (user && hash === user.password) {
-      return user.email;
-    } else {
-      return null;
+    if (!user) {
+      throw new UnauthorizedException('Invalid Credentials');
     }
+    const hash = await bcrypt.hash(password, user.salt);
+    if (hash !== user.password) {
+      throw new UnauthorizedException('Invalid Credentials');
+    }
+    return user.email;
   }
 
   private async initializeEncryptUser(
