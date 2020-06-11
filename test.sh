@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose exec nest sh -c "npm run test:cov"
+docker-compose exec nest sh -c "npm run test"

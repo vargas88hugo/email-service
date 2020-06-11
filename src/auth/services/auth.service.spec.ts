@@ -1,21 +1,39 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UserRepository } from '../repositories/user.repository';
-
-const mockUserRepository = () => ({});
+import { Connection, Repository } from 'typeorm';
+import { User } from '../entities/user.entity';
+import { typeOrmTest } from '../../config/typeormtest.config';
+import { ConflictException } from '@nestjs/common';
 
 let authService: AuthService;
 let userRepository: UserRepository;
 describe('AuthService', () => {
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        { provide: UserRepository, useFactory: mockUserRepository },
-      ],
-    }).compile();
+  let db: Connection;
+  let authService: AuthService;
+  let userRepository: Repository<User>;
 
-    authService = await module.get<AuthService>(AuthService);
-    userRepository = await module.get<UserRepository>(UserRepository);
+  beforeAll(async () => {
+    db = await typeOrmTest([User]);
+    userRepository = db.getRepository(User);
+    authService = new AuthService(userRepository);
+  });
+  afterAll(() => db.close());
+
+  it('should create a new user', async () => {
+    const email = 'test@email.com';
+    const password = 'Password123';
+
+    await expect(
+      authService.signUp({ email, password }),
+    ).resolves.not.toThrow();
+  });
+
+  it('throws a conflic exception as username already exists', async () => {
+    const email = 'test@email.com';
+    const password = 'Password123';
+
+    await expect(authService.signUp({ email, password })).rejects.toThrow(
+      ConflictException,
+    );
   });
 });
