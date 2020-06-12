@@ -5,7 +5,10 @@ import { SendEmailDto } from '../dto/send-email.dto';
 import { MailRepository } from '../mail.repository';
 import { User } from '../../auth/user.entity';
 import { MailController } from '../mail.controller';
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 
 const mockMailRepository = () => ({
   createQueryBuilder: jest.fn(),
@@ -74,5 +77,13 @@ describe('Mail', () => {
       .spyOn(mailService, 'getEmails')
       .mockImplementationOnce(async () => result);
     expect(await mailController.getEmails(mockUser)).toBe(result);
+  });
+
+  it('throws an unauthorized exception as user is wrong in sendEmail', async () => {
+    await expect(mailController.sendEmail(null, null)).rejects.toThrow();
+  });
+
+  it('throws an unauthorized exception as user is wrong in getEmails', async () => {
+    await expect(mailController.getEmails(null)).rejects.toThrow();
   });
 });
