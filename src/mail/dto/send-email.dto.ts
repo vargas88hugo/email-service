@@ -1,7 +1,6 @@
-import { Mail } from '../mail.interface';
 import { IsString, MinLength, MaxLength, IsEmail } from 'class-validator';
 
-export class SendEmailDto implements Mail {
+export class SendEmailDto {
   @IsString()
   @MaxLength(30)
   @IsEmail()

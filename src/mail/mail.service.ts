@@ -2,16 +2,17 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import * as SparkPost from 'sparkpost';
 import { SendEmailDto } from './dto/send-email.dto';
 import * as sgMail from '@sendgrid/mail';
+import { User } from '../auth/user.entity';
+import { UserRepository } from '../auth/user.repository';
 
 @Injectable()
 export class MailService {
-  private client: SparkPost;
+  constructor(private userRepository: UserRepository) {}
 
-  async sendEmail(sendEmailDto: SendEmailDto): Promise<any> {
+  async sendEmail(sendEmailDto: SendEmailDto, user: User): Promise<any> {
     try {
       return await this.sendGrid(sendEmailDto);
     } catch (err) {
-      console.log(err.response.body.errors);
       try {
         return await this.sparkPost(sendEmailDto);
       } catch (error) {
@@ -34,8 +35,8 @@ export class MailService {
   }
 
   async sparkPost(sendEmailDto: SendEmailDto) {
-    this.client = new SparkPost(process.env.SPARKPOST_KEY);
-    return await this.client.transmissions.send({
+    const client = new SparkPost(process.env.SPARKPOST_KEY);
+    return await client.transmissions.send({
       options: {
         sandbox: true,
       },
@@ -52,5 +53,6 @@ export class MailService {
       },
       recipients: [{ address: sendEmailDto.to }],
     });
+    return 'This works!';
   }
 }

@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MailService } from './mail.service';
-import * as SparkPost from '../../node_modules/sparkpost';
 import { SendEmailDto } from './dto/send-email.dto';
 import { MailController } from './mail.controller';
 import { ClientResponse } from '@sendgrid/client/src/response';
-import * as axios from 'axios';
+import { UserRepository } from '../auth/user.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '../auth/auth.module';
 
-jest.mock('sparkpost');
+const mockUserRepository = () => ({});
 
 describe('Mail', () => {
   let mailService: MailService;
@@ -16,7 +17,10 @@ describe('Mail', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MailController],
-      providers: [MailService],
+      providers: [
+        MailService,
+        { provide: UserRepository, useFactory: mockUserRepository },
+      ],
     }).compile();
 
     mailController = module.get<MailController>(MailController);
@@ -38,7 +42,7 @@ describe('Mail', () => {
   it('should get response from sendEmail', async () => {
     const result: [ClientResponse, {}] = [null, {}];
     jest.spyOn(mailService, 'sendEmail').mockImplementation(async () => result);
-    expect(await mailService.sendEmail(sendEmail)).toBe(result);
+    expect(await mailService.sendEmail(sendEmail, null)).toBe(result);
   });
 
   it('should get response from Sparkpost', async () => {
