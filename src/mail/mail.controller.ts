@@ -20,7 +20,7 @@ export class MailController {
   sendEmail(
     @Body(ValidationPipe) sendEmailDto: SendEmailDto,
     @GetUser() user: User,
-  ): Promise<any> {
+  ): Promise<string> {
     return this.mailService.sendEmail(sendEmailDto, user);
   }
 }

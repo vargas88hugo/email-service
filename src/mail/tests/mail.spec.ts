@@ -1,11 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MailService } from './mail.service';
-import { SendEmailDto } from './dto/send-email.dto';
-import { MailController } from './mail.controller';
-import { ClientResponse } from '@sendgrid/client/src/response';
-import { UserRepository } from '../auth/user.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '../auth/auth.module';
+
+import { MailService } from '../mail.service';
+import { SendEmailDto } from '../dto/send-email.dto';
+import { MailController } from '../mail.controller';
+import { UserRepository } from '../../auth/user.repository';
 
 const mockUserRepository = () => ({});
 
@@ -34,26 +32,38 @@ describe('Mail', () => {
   });
 
   it('should get response from SendGrid', async () => {
-    const result: [ClientResponse, {}] = [null, {}];
+    const result = null;
     jest.spyOn(mailService, 'sendGrid').mockImplementation(async () => result);
     expect(await mailService.sendGrid(sendEmail)).toBe(result);
   });
 
   it('should get response from sendEmail', async () => {
-    const result: [ClientResponse, {}] = [null, {}];
+    const result = null;
     jest.spyOn(mailService, 'sendEmail').mockImplementation(async () => result);
     expect(await mailService.sendEmail(sendEmail, null)).toBe(result);
   });
 
   it('should get response from Sparkpost', async () => {
-    const result = {
-      results: {
-        total_rejected_recipients: 0,
-        total_accepted_recipients: 1,
-        id: '123',
-      },
-    };
+    const result = null;
     jest.spyOn(mailService, 'sparkPost').mockImplementation(async () => result);
     expect(await mailService.sparkPost(sendEmail)).toBe(result);
+  });
+
+  it('should get response from useProviders', async () => {
+    const result = 'SendGrid';
+    jest
+      .spyOn(mailService, 'useProviders')
+      .mockImplementation(async () => result);
+    expect(await mailService.useProviders(sendEmail)).toBe(result);
+  });
+
+  it('should get response from createEmail', async () => {
+    const result = null;
+    jest
+      .spyOn(mailService, 'createEmail')
+      .mockImplementation(async () => result);
+    expect(await mailService.createEmail(sendEmail, null, 'SendGrid')).toBe(
+      result,
+    );
   });
 });

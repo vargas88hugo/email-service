@@ -1,58 +1,76 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as SparkPost from 'sparkpost';
 import { SendEmailDto } from './dto/send-email.dto';
 import * as sgMail from '@sendgrid/mail';
 import { User } from '../auth/user.entity';
 import { UserRepository } from '../auth/user.repository';
+import { Mail } from './mail.entity';
 
 @Injectable()
 export class MailService {
   constructor(private userRepository: UserRepository) {}
 
-  async sendEmail(sendEmailDto: SendEmailDto, user: User): Promise<any> {
+  async sendEmail(sendEmailDto: SendEmailDto, user: User): Promise<string> {
+    const provider = await this.useProviders(sendEmailDto);
+    await this.createEmail(sendEmailDto, user, provider);
+    return `Email has been sended to ${sendEmailDto.to}`;
+  }
+
+  async createEmail(sendEmailDto: SendEmailDto, user: User, provider: string) {
+    const email = new Mail();
+    email.to = sendEmailDto.to;
+    email.subject = sendEmailDto.subject;
+    email.provider = provider;
+    email.user = user;
     try {
-      return await this.sendGrid(sendEmailDto);
-    } catch (err) {
-      try {
-        return await this.sparkPost(sendEmailDto);
-      } catch (error) {
-        throw new BadRequestException("Email can't be sended");
-      }
+      await email.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 
-  async sendGrid(sendEmailDto: SendEmailDto) {
+  async sendGrid(sendEmailDto: SendEmailDto): Promise<void> {
     sgMail.setApiKey(process.env.SENDGRID_KEY);
     const msg = {
       to: sendEmailDto.to,
       from: sendEmailDto.from,
       subject: sendEmailDto.subject,
       text: sendEmailDto.text,
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      html: `<strong>${sendEmailDto.text}</strong>`,
     };
-    const result = await sgMail.send(msg);
-    return result;
+    await sgMail.send(msg);
   }
 
-  async sparkPost(sendEmailDto: SendEmailDto) {
+  async sparkPost(sendEmailDto: SendEmailDto): Promise<void> {
     const client = new SparkPost(process.env.SPARKPOST_KEY);
-    return await client.transmissions.send({
+    await client.transmissions.send({
       options: {
         sandbox: true,
       },
       content: {
         from: sendEmailDto.from,
         subject: sendEmailDto.subject,
-        html: `<html>
-                <body>
-                  <p>
-                    ${sendEmailDto.text}
-                  </p>
-                </body>
-              </html>`,
+        html: `<strong>${sendEmailDto.text}</strong>`,
       },
       recipients: [{ address: sendEmailDto.to }],
     });
-    return 'This works!';
+  }
+
+  async useProviders(sendEmailDto: SendEmailDto): Promise<string> {
+    try {
+      await this.sendGrid(sendEmailDto);
+      return 'SendGrid';
+    } catch (err) {
+      try {
+        return 'SparkPost';
+      } catch (error) {
+        console.log('Spark', error);
+        throw new BadRequestException("Email can't be sended");
+      }
+    }
   }
 }

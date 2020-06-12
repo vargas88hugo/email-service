@@ -4,11 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { AuthService } from './auth.service';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { JwtStrategy } from './jwt.strategy';
-import { typeOrmConfigTest } from '../config/typeorm.configtest';
-import { UserRepository } from './user.repository';
+import { AuthService } from '../auth.service';
+import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
+import { JwtStrategy } from '../jwt.strategy';
+import { typeOrmConfigTest } from '../../config/typeorm.configtest';
+import { UserRepository } from '../user.repository';
 
 const mockUserRepository = () => ({});
 
