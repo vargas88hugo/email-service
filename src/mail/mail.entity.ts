@@ -27,4 +27,7 @@ export class Mail extends BaseEntity {
     { eager: false },
   )
   user: User;
+
+  @Column()
+  userId: number;
 }

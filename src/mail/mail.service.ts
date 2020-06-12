@@ -7,17 +7,24 @@ import * as SparkPost from 'sparkpost';
 import { SendEmailDto } from './dto/send-email.dto';
 import * as sgMail from '@sendgrid/mail';
 import { User } from '../auth/user.entity';
-import { UserRepository } from '../auth/user.repository';
 import { Mail } from './mail.entity';
+import { MailRepository } from './mail.repository';
 
 @Injectable()
 export class MailService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private mailRepository: MailRepository) {}
 
   async sendEmail(sendEmailDto: SendEmailDto, user: User): Promise<string> {
     const provider = await this.useProviders(sendEmailDto);
     await this.createEmail(sendEmailDto, user, provider);
     return `Email has been sended to ${sendEmailDto.to}`;
+  }
+
+  async getEmails(user: User): Promise<Mail[]> {
+    const query = this.mailRepository.createQueryBuilder('mail');
+    query.where('mail.userId = :userId', { userId: user.id });
+    const mails = await query.getMany();
+    return mails;
   }
 
   async createEmail(sendEmailDto: SendEmailDto, user: User, provider: string) {
