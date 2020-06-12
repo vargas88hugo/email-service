@@ -1,29 +1,46 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import * as SparkPost from 'sparkpost';
 import { SendEmailDto } from './dto/send-email.dto';
+import * as sgMail from '@sendgrid/mail';
 
 @Injectable()
 export class MailService {
   private client: SparkPost;
 
-  async sendEmail(sendEmailDto: SendEmailDto) {
+  async sendEmail(sendEmailDto: SendEmailDto): Promise<any> {
     try {
-      return await this.sparkPost(sendEmailDto);
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException("Email can't be sended");
+      return await this.sendGrid(sendEmailDto);
+    } catch (err) {
+      console.log(err.response.body.errors);
+      try {
+        return await this.sparkPost(sendEmailDto);
+      } catch (error) {
+        throw new BadRequestException("Email can't be sended");
+      }
     }
+  }
+
+  async sendGrid(sendEmailDto: SendEmailDto) {
+    sgMail.setApiKey(process.env.SENDGRID_KEY);
+    const msg = {
+      to: sendEmailDto.to,
+      from: sendEmailDto.from,
+      subject: sendEmailDto.subject,
+      text: sendEmailDto.text,
+      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    };
+    const result = await sgMail.send(msg);
+    return result;
   }
 
   async sparkPost(sendEmailDto: SendEmailDto) {
     this.client = new SparkPost(process.env.SPARKPOST_KEY);
-    console.log(process.env.SPARKPOST_KEY);
     return await this.client.transmissions.send({
       options: {
         sandbox: true,
       },
       content: {
-        from: 'testing@sparkpostbox.com',
+        from: sendEmailDto.from,
         subject: sendEmailDto.subject,
         html: `<html>
                 <body>

@@ -42,7 +42,7 @@ describe('AuthService', () => {
       password: 'Password123',
     };
   });
-  afterEach(() => jest.resetAllMocks());
+  afterAll(() => jest.resetAllMocks());
 
   it('should create a new user', async () => {
     await expect(authService.signUp(user)).resolves.not.toThrow();
