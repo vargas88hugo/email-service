@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-rm -r /var/www/email-service/*
-cd /var/www/email-service
-docker container stop $(docker ps) || :
+cd /var/www/email-service/
 docker-compose build
 docker-compose up -d
 docker-compose exec db psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'password';" || :

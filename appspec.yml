@@ -2,8 +2,12 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /var/www/email-service/
+    destination: /var/www/email-service
 hooks:
+  BeforeInstall:
+    - location: scripts/clear.sh
+      timeout: 300
+      runas: root
   AfterInstall:
     - location: /var/www/email-service/deploy.sh
       timeout: 300
