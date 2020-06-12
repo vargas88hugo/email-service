@@ -9,6 +9,6 @@ hooks:
       timeout: 300
       runas: root
   AfterInstall:
-    - location: /var/www/email-service/deploy.sh
+    - location: scripts/deploy.sh
       timeout: 300
       runas: root
