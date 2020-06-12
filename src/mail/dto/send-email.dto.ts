@@ -5,6 +5,11 @@ export class SendEmailDto implements Mail {
   @IsString()
   @MaxLength(30)
   @IsEmail()
+  from: string;
+
+  @IsString()
+  @MaxLength(30)
+  @IsEmail()
   to: string;
 
   @IsString()

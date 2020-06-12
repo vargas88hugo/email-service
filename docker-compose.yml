@@ -8,8 +8,12 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    env_file:
-      - .env
+    environment:
+      DB_USER: '${DB_USER}'
+      DB_PASSWORD: '${DB_PASSWORD}'
+      SECRET: '$SECRET'
+      SPARKPOST_KEY: '$SPARKPOST_KEY'
+      SENDGRID_KEY: '$SENDGRID_KEY'
     depends_on:
       - 'db'
 
@@ -18,8 +22,6 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: '${DB_PASSWORD}'
-    env_file:
-      - .env
 
   adminer:
     image: 'adminer:4.7'

@@ -17,6 +17,7 @@ describe('Mail', () => {
     mailService = module.get<MailService>(MailService);
 
     sendEmail = {
+      from: 'host@email.com',
       to: 'test@email.com',
       subject: 'any subject',
       text: 'any text',
