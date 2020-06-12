@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+rm -r /var/www/email-service/*
 cd /var/www/email-service
 docker container stop $(docker ps) || :
 docker-compose build
