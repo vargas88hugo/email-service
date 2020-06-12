@@ -2,4 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /var/www/
+    destination: /var/www/email-service/
+hooks:
+  AfterInstall:
+    - location: /var/www/email-service/deploy.sh
+      timeout: 300
+      runas: root
