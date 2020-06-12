@@ -45,7 +45,6 @@ describe('Mail', () => {
     mailController = module.get<MailController>(MailController);
     mailService = module.get<MailService>(MailService);
     sendEmail = {
-      from: 'vargas88hugo@gmail.com',
       to: 'vargas88hugo@gmail.com',
       subject: 'test subject',
       text: 'test text',
