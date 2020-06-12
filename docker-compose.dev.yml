@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - '80:80'
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
@@ -16,7 +16,7 @@ services:
       SECRET: '$SECRET'
       SPARKPOST_KEY: '$SPARKPOST_KEY'
       SENDGRID_KEY: '$SENDGRID_KEY'
-      PORT: 80
+      PORT: 3000
     depends_on:
       - 'db'
 
