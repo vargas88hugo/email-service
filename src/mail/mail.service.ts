@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import * as SparkPost from 'sparkpost';
 import { SendEmailDto } from './dto/send-email.dto';
 
@@ -6,19 +6,19 @@ import { SendEmailDto } from './dto/send-email.dto';
 export class MailService {
   private client: SparkPost;
 
-  constructor() {}
-
   async sendEmail(sendEmailDto: SendEmailDto) {
     try {
-      await this.sparkPost(sendEmailDto);
+      return await this.sparkPost(sendEmailDto);
     } catch (error) {
-      console.log('ups');
+      console.log(error);
+      throw new BadRequestException("Email can't be sended");
     }
   }
 
   async sparkPost(sendEmailDto: SendEmailDto) {
     this.client = new SparkPost(process.env.SPARKPOST_KEY);
-    const response = await this.client.transmissions.send({
+    console.log(process.env.SPARKPOST_KEY);
+    return await this.client.transmissions.send({
       options: {
         sandbox: true,
       },
@@ -35,9 +35,5 @@ export class MailService {
       },
       recipients: [{ address: sendEmailDto.to }],
     });
-
-    console.log(response);
-
-    return response;
   }
 }
