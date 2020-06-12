@@ -44,7 +44,7 @@ export class MailService {
     sgMail.setApiKey(process.env.SENDGRID_KEY);
     const msg = {
       to: sendEmailDto.to,
-      from: sendEmailDto.from,
+      from: 'vargas88hugo@gmail.com',
       subject: sendEmailDto.subject,
       text: sendEmailDto.text,
       html: `<strong>${sendEmailDto.text}</strong>`,
@@ -59,7 +59,7 @@ export class MailService {
         sandbox: true,
       },
       content: {
-        from: sendEmailDto.from,
+        from: 'testing@sparkpostbox.com',
         subject: sendEmailDto.subject,
         html: `<strong>${sendEmailDto.text}</strong>`,
       },

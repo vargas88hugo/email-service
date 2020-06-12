@@ -1,4 +1,9 @@
 import { Controller, ValidationPipe, Post, Body, Delete } from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiUnauthorizedResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -9,6 +14,8 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
+  @ApiCreatedResponse({ description: 'User Signup' })
+  @ApiBody({ type: AuthCredentialsDto })
   signUp(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<string> {
@@ -16,6 +23,9 @@ export class AuthController {
   }
 
   @Post('/signin')
+  @ApiCreatedResponse({ description: 'User Singin' })
+  @ApiUnauthorizedResponse({ description: 'Invalid Credentials' })
+  @ApiBody({ type: SignInCredentialsDto })
   signIn(
     @Body(ValidationPipe) signInCredentialsDto: SignInCredentialsDto,
   ): Promise<{ accessToken: string }> {

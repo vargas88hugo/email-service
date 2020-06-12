@@ -5,6 +5,7 @@ import {
   Column,
   OneToMany,
 } from 'typeorm';
+
 import { Mail } from '../mail/mail.entity';
 
 @Entity()
