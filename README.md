@@ -78,7 +78,7 @@ The architecture used in this project is based CI / CD with Jest, Travis CI, AWS
 ```
 <a name="Testing"></a>
 ## Testing
-The testing was hard because mock email services are a little tricky and more in NestJS because everything is based on dependency injection. The coverage is green and it has a 89.4% statement. My goal is to paint all with 100%.
+The testing was hard because mock email services are a little tricky and more in NestJS because everything is based on dependency injection. The coverage is green and it has a 89.4% statement but my goal is to paint all with 100%.
 <img align="center" src="http://i.imgur.com/62kHPWl.png" />
 
 <a name="Instalation"></a>
