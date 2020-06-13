@@ -88,7 +88,7 @@ The testing was hard because mock email services are a little tricky and more in
 
 <a name="Instalation"></a>
 ## Instalation
-There are two ways of installation. In Production on port 80 or Development on port 3000. In the root directory of repository:
+There are two ways of installation. In Production on port 80 or Development on port 3000 in the root directory of repository. You need to first configure the environment variables that the docker-compose will need.
 ### Production
 ```
 $ docker-compose build
