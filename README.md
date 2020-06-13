@@ -110,7 +110,7 @@ $ docker-compose -f docker-compose.dev.yml exec nest sh -c "npm run test"
 <a name="Usage"></a>
 ## Usage
 This application has integrated Swagger with documentation, Adminer which is a database manegement and some useful scripts in its folder. Swagger can be used with JWT Bearer Authentication for testing purposes because some routes are private. The token must be obtained from the SignIn response and inserted in the Authorize Panel at the top right of the GUI.
-## Otros Endpoints
+## Endpoints
 | URL | Service |
 |-----|---------|
 | http://localhost:8080 | Adminer database manegement |
