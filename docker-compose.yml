@@ -9,8 +9,8 @@ services:
       - .:/app
       - /app/node_modules
     environment:
-      DB_USER: '${DB_USER}'
-      DB_PASSWORD: '${DB_PASSWORD}'
+      DB_USER: '$DB_USER'
+      DB_PASSWORD: '$DB_PASSWORD'
       SECRET: '$SECRET'
       SPARKPOST_KEY: '$SPARKPOST_KEY'
       SENDGRID_KEY: '$SENDGRID_KEY'
@@ -22,7 +22,7 @@ services:
     image: postgres:12
     restart: always
     environment:
-      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      POSTGRES_PASSWORD: '$DB_PASSWORD'
 
   adminer:
     image: 'adminer:4.7'
