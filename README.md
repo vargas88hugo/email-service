@@ -99,6 +99,7 @@ $ docker-compose exec db psql -U postgres -c "CREATE DATABASE test;"
 ```
 ### Development
 ```
+$ docker-compose -f docker-compose.dev.yml build
 $ docker-compose -f docker-compose.dev.yml up -d
 $ docker-compose -f docker-compose.dev.yml exec db psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'password';"
 $ docker-compose -f docker-compose.dev.yml exec db psql -U postgres -c "CREATE DATABASE emailservice;"
