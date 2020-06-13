@@ -113,7 +113,7 @@ This application has integrated Swagger with documentation, Adminer which is a d
 ## Endpoints
 | URL | Service |
 |-----|---------|
-| http://localhost:8080 | Adminer database manegement |
+| http://localhost:8080 | Adminer database management |
 | http://localhost:3000 | Email Service in Development |
 | http://localhost:80 | Email Service in Production |
 | http://localhost:ENV/api | Swagger documentation |
