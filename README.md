@@ -14,6 +14,9 @@ Email Service is an application that guarantees the sending of messages with Sen
 <a name="Arquitecture"></a>
 ## Arquitecture
 The architecture used in this project is based CI / CD with Jest, Travis CI, AWS CodeDeploy, AWS S3, and AWS EC2. The great challange was the deployment and was finally achieved. In terms of software architecture all the program is divided in modules with their controllers, services, repositories and entities. The repositories are decoupled from the controllers and all the business logic is concentrated in the services.
+<div align="center">
+<img align="center" src="https://i.imgur.com/3XL71bZ.png" />
+</div>
 
 <a name="Folder"></a>
 ## Folder Structure
@@ -79,7 +82,9 @@ The architecture used in this project is based CI / CD with Jest, Travis CI, AWS
 <a name="Testing"></a>
 ## Testing
 The testing was hard because mock email services are a little tricky and more in NestJS because everything is based on dependency injection. The coverage is green and it has a 89.4% statement but my goal is to paint all with 100%.
+<div align="center">
 <img align="center" src="http://i.imgur.com/62kHPWl.png" />
+</div>
 
 <a name="Instalation"></a>
 ## Instalation
