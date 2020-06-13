@@ -14,7 +14,3 @@ export SENDGRID_KEY=$LOCAL_SENDGRID_KEY
 
 docker-compose build
 docker-compose up -d
-docker-compose exec db psql -U postgres -d postgres -c "ALTER USER $DB_USER WITH PASSWORD '$DB_PASSWORD';" || :
-docker-compose exec db psql -U postgres -c "CREATE DATABASE emailservice;" || :
-docker-compose exec db psql -U postgres -c "CREATE DATABASE test;" || :
-docker-compose up -d
